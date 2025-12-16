@@ -1,0 +1,61 @@
+{% extends 'blog/base.html' %}
+{% block title %}会員登録 | myblog{% endblock %}
+{% block content %}
+<div class="form-container">
+    <h2>会員登録</h2>
+    <form method="post">
+        {% csrf_token %}
+        
+        {% if form.errors %}
+        <div style="background: #fee; color: #c33; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+            <strong>エラー:</strong>
+            <ul style="margin: 0.5rem 0 0 1.5rem;">
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        
+        <div class="form-group">
+            <label for="id_username">ユーザー名</label>
+            <input type="text" name="username" id="id_username" required autofocus 
+                   value="{{ form.username.value|default_if_none:'' }}"
+                   placeholder="ユーザー名を入力">
+            {% if form.username.help_text %}
+            <small style="color: var(--color-text-light); font-size: 0.875rem;">{{ form.username.help_text }}</small>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_password1">パスワード</label>
+            <input type="password" name="password1" id="id_password1" required 
+                   placeholder="パスワードを入力">
+            {% if form.password1.help_text %}
+            <small style="color: var(--color-text-light); font-size: 0.875rem;">{{ form.password1.help_text }}</small>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_password2">パスワード（確認）</label>
+            <input type="password" name="password2" id="id_password2" required 
+                   placeholder="パスワードを再入力">
+            {% if form.password2.help_text %}
+            <small style="color: var(--color-text-light); font-size: 0.875rem;">{{ form.password2.help_text }}</small>
+            {% endif %}
+        </div>
+        
+        <button type="submit" class="btn">登録</button>
+        <a href="{% url 'blog:login' %}" class="btn btn-secondary" style="margin-left: 0.5rem;">ログイン</a>
+    </form>
+    
+    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
+        <p style="color: var(--color-text-light); font-size: 0.875rem;">
+            既にアカウントをお持ちですか？ <a href="{% url 'blog:login' %}">ログイン</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+

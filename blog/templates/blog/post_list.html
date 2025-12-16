@@ -17,9 +17,11 @@
                     <small>{{ post.created_at|date:'Y年m月d日 H:i' }}</small>
                     <small>❤️ {{ post.likes }}</small>
                 </div>
+                {% if user.is_authenticated %}
                 <div class="post-item-actions">
                     <a href="{% url 'blog:edit' post.pk %}">編集</a>
                 </div>
+                {% endif %}
             </div>
         </li>
     {% endfor %}

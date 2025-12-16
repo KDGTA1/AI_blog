@@ -120,3 +120,8 @@ STATIC_URL = 'static/'
 # Media files (User uploaded files)
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Authentication
+LOGIN_URL = 'blog:login'
+LOGIN_REDIRECT_URL = 'blog:list'
+LOGOUT_REDIRECT_URL = 'blog:list'

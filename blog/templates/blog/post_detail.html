@@ -32,7 +32,9 @@
 </article>
 
 <div class="action-links">
+    {% if user.is_authenticated %}
     <a href="{% url 'blog:edit' post.pk %}">この記事を編集する</a>
+    {% endif %}
     <a href="{% url 'blog:list' %}">← 一覧に戻る</a>
 </div>
 {% endblock %}

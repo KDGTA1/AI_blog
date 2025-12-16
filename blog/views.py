@@ -1,5 +1,9 @@
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.contrib import messages
 
 from .models import Post
 
@@ -19,6 +23,7 @@ def post_detail(request, pk: int):
     return render(request, "blog/post_detail.html", {"post": post, "is_liked": is_liked})
 
 
+@login_required
 def post_create(request):
     """シンプルな記事作成ビュー"""
     if request.method == "POST":
@@ -41,6 +46,7 @@ def post_create(request):
     return render(request, "blog/post_form.html")
 
 
+@login_required
 def post_edit(request, pk: int):
     """記事編集ビュー"""
     post = get_object_or_404(Post, pk=pk)
@@ -87,3 +93,49 @@ def post_like(request, pk: int):
         request.session["liked_posts"] = liked_posts
     
     return redirect(reverse("blog:detail", args=[post.pk]))
+
+
+def signup(request):
+    """ユーザー登録"""
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # 自動的にログイン
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password1")
+            user = authenticate(username=username, password=password)
+            if user:
+                login(request, user)
+                messages.success(request, "アカウントを作成しました！")
+                return redirect("blog:list")
+    else:
+        form = UserCreationForm()
+    return render(request, "blog/signup.html", {"form": form})
+
+
+def user_login(request):
+    """ログイン"""
+    if request.user.is_authenticated:
+        return redirect("blog:list")
+    
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            messages.success(request, f"ようこそ、{username}さん！")
+            next_url = request.GET.get("next", "blog:list")
+            return redirect(next_url)
+        else:
+            messages.error(request, "ユーザー名またはパスワードが正しくありません。")
+    return render(request, "blog/login.html")
+
+
+def user_logout(request):
+    """ログアウト"""
+    from django.contrib.auth import logout
+    logout(request)
+    messages.success(request, "ログアウトしました。")
+    return redirect("blog:list")

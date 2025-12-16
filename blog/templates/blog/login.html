@@ -1,0 +1,44 @@
+{% extends 'blog/base.html' %}
+{% block title %}ログイン | myblog{% endblock %}
+{% block content %}
+<div class="form-container">
+    <h2>ログイン</h2>
+    <form method="post">
+        {% csrf_token %}
+        
+        {% if messages %}
+        <div style="margin-bottom: 1.5rem;">
+            {% for message in messages %}
+            <div style="background: {% if message.tags == 'error' %}#fee{% else %}#efe{% endif %}; 
+                        color: {% if message.tags == 'error' %}#c33{% else %}#3c3{% endif %}; 
+                        padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem;">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <div class="form-group">
+            <label for="id_username">ユーザー名</label>
+            <input type="text" name="username" id="id_username" required autofocus 
+                   placeholder="ユーザー名を入力">
+        </div>
+        
+        <div class="form-group">
+            <label for="id_password">パスワード</label>
+            <input type="password" name="password" id="id_password" required 
+                   placeholder="パスワードを入力">
+        </div>
+        
+        <button type="submit" class="btn">ログイン</button>
+        <a href="{% url 'blog:signup' %}" class="btn btn-secondary" style="margin-left: 0.5rem;">会員登録</a>
+    </form>
+    
+    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
+        <p style="color: var(--color-text-light); font-size: 0.875rem;">
+            アカウントをお持ちでないですか？ <a href="{% url 'blog:signup' %}">会員登録</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+
