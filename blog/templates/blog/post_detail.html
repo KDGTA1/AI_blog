@@ -4,8 +4,25 @@
 <article>
     <h2>{{ post.title }}</h2>
     <p><small>{{ post.created_at|date:'Y-m-d H:i' }}</small></p>
+    {% if post.image %}
+    <p>
+        <img src="{{ post.image.url }}" alt="{{ post.title }}" style="max-width: 100%; height: auto;">
+    </p>
+    {% endif %}
     <div>
         {{ post.content|linebreaksbr }}
+    </div>
+    <div style="margin-top: 20px;">
+        {% if is_liked %}
+        <p>❤️ <strong>{{ post.likes }}</strong> いいね（既にいいねしました）</p>
+        {% else %}
+        <form method="post" action="{% url 'blog:like' post.pk %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" style="background: #ff6b6b; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
+                ❤️ いいね ({{ post.likes }})
+            </button>
+        </form>
+        {% endif %}
     </div>
 </article>
 <p>

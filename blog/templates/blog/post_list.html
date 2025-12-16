@@ -6,8 +6,12 @@
     <ul>
     {% for post in posts %}
         <li>
+            {% if post.image %}
+            <img src="{{ post.image.url }}" alt="{{ post.title }}" style="max-width: 100px; height: auto; vertical-align: middle; margin-right: 10px;">
+            {% endif %}
             <a href="{% url 'blog:detail' post.pk %}">{{ post.title }}</a>
             <small>{{ post.created_at|date:'Y-m-d H:i' }}</small>
+            <small>❤️ {{ post.likes }}</small>
             <small><a href="{% url 'blog:edit' post.pk %}">編集</a></small>
         </li>
     {% endfor %}
