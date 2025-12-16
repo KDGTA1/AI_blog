@@ -1,0 +1,18 @@
+{% extends 'blog/base.html' %}
+{% block title %}記事一覧 | myblog{% endblock %}
+{% block content %}
+<h2>記事一覧</h2>
+{% if posts %}
+    <ul>
+    {% for post in posts %}
+        <li>
+            <a href="{% url 'blog:detail' post.pk %}">{{ post.title }}</a>
+            <small>{{ post.created_at|date:'Y-m-d H:i' }}</small>
+            <small><a href="{% url 'blog:edit' post.pk %}">編集</a></small>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>まだ記事がありません。</p>
+{% endif %}
+{% endblock %}
