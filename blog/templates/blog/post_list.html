@@ -3,20 +3,31 @@
 {% block content %}
 <h2>記事一覧</h2>
 {% if posts %}
-    <ul>
+    <ul class="post-list">
     {% for post in posts %}
-        <li>
+        <li class="post-item">
             {% if post.image %}
-            <img src="{{ post.image.url }}" alt="{{ post.title }}" style="max-width: 100px; height: auto; vertical-align: middle; margin-right: 10px;">
+            <img src="{{ post.image.url }}" alt="{{ post.title }}" class="post-item-image">
             {% endif %}
-            <a href="{% url 'blog:detail' post.pk %}">{{ post.title }}</a>
-            <small>{{ post.created_at|date:'Y-m-d H:i' }}</small>
-            <small>❤️ {{ post.likes }}</small>
-            <small><a href="{% url 'blog:edit' post.pk %}">編集</a></small>
+            <div class="post-item-content">
+                <h3 class="post-item-title">
+                    <a href="{% url 'blog:detail' post.pk %}">{{ post.title }}</a>
+                </h3>
+                <div class="post-item-meta">
+                    <small>{{ post.created_at|date:'Y年m月d日 H:i' }}</small>
+                    <small>❤️ {{ post.likes }}</small>
+                </div>
+                <div class="post-item-actions">
+                    <a href="{% url 'blog:edit' post.pk %}">編集</a>
+                </div>
+            </div>
         </li>
     {% endfor %}
     </ul>
 {% else %}
-    <p>まだ記事がありません。</p>
+    <div class="empty-state">
+        <p>まだ記事がありません。</p>
+        <a href="{% url 'blog:create' %}" class="btn">最初の記事を書く</a>
+    </div>
 {% endif %}
 {% endblock %}

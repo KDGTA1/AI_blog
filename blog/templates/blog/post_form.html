@@ -1,40 +1,45 @@
 {% extends 'blog/base.html' %}
 {% block title %}{% if post %}記事編集{% else %}新規記事{% endif %} | myblog{% endblock %}
 {% block content %}
-<h2>{% if post %}記事編集{% else %}新規記事{% endif %}</h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <p>
-        <label>タイトル<br>
-            <input type="text" name="title" required style="width: 100%" value="{{ post.title|default_if_none:'' }}">
-        </label>
-    </p>
-    <p>
-        <label>本文<br>
-            <textarea name="content" rows="10" required style="width: 100%">{{ post.content|default_if_none:'' }}</textarea>
-        </label>
-    </p>
-    <p>
-        <label>画像<br>
-            <input type="file" name="image" accept="image/*">
-        </label>
-    </p>
-    {% if post and post.image %}
-    <p>
-        <img src="{{ post.image.url }}" alt="{{ post.title }}" style="max-width: 300px; height: auto;">
-        <br>
-        <label>
-            <input type="checkbox" name="delete_image"> 画像を削除する
-        </label>
-    </p>
-    {% endif %}
-    <p>
-        <label>
-            <input type="checkbox" name="is_published"
-                   {% if post %}{% if post.is_published %}checked{% endif %}{% else %}checked{% endif %}>
-            公開する
-        </label>
-    </p>
-    <button type="submit">保存</button>
-</form>
+<div class="form-container">
+    <h2>{% if post %}記事編集{% else %}新規記事{% endif %}</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="id_title">タイトル</label>
+            <input type="text" name="title" id="id_title" required value="{{ post.title|default_if_none:'' }}" placeholder="記事のタイトルを入力">
+        </div>
+        
+        <div class="form-group">
+            <label for="id_content">本文</label>
+            <textarea name="content" id="id_content" rows="12" required placeholder="記事の本文を入力">{{ post.content|default_if_none:'' }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="id_image">画像</label>
+            <input type="file" name="image" id="id_image" accept="image/*">
+        </div>
+        
+        {% if post and post.image %}
+        <div class="form-group">
+            <img src="{{ post.image.url }}" alt="{{ post.title }}" class="form-image-preview">
+            <label class="checkbox-label">
+                <input type="checkbox" name="delete_image"> 画像を削除する
+            </label>
+        </div>
+        {% endif %}
+        
+        <div class="form-group">
+            <label class="checkbox-label">
+                <input type="checkbox" name="is_published"
+                       {% if post %}{% if post.is_published %}checked{% endif %}{% else %}checked{% endif %}>
+                公開する
+            </label>
+        </div>
+        
+        <button type="submit" class="btn">保存</button>
+        <a href="{% if post %}{% url 'blog:detail' post.pk %}{% else %}{% url 'blog:list' %}{% endif %}" class="btn btn-secondary" style="margin-left: 0.5rem;">キャンセル</a>
+    </form>
+</div>
 {% endblock %}

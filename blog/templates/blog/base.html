@@ -1,17 +1,21 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}myblog{% endblock %}</title>
-    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" />
+    <link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
 </head>
 <body>
     <header>
-        <h1><a href="{% url 'blog:list' %}">myblog</a></h1>
-        <nav>
-            <a href="{% url 'blog:create' %}">新規記事</a>
-        </nav>
-        <hr>
+        <div class="header-container">
+            <h1><a href="{% url 'blog:list' %}">myblog</a></h1>
+            <nav>
+                <a href="{% url 'blog:list' %}">記事一覧</a>
+                <a href="{% url 'blog:create' %}">新規記事</a>
+            </nav>
+        </div>
     </header>
 
     <main>
@@ -19,5 +23,3 @@
     </main>
 </body>
 </html>
-
-

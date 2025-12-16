@@ -1,32 +1,38 @@
 {% extends 'blog/base.html' %}
 {% block title %}{{ post.title }} | myblog{% endblock %}
 {% block content %}
-<article>
-    <h2>{{ post.title }}</h2>
-    <p><small>{{ post.created_at|date:'Y-m-d H:i' }}</small></p>
+<article class="card">
+    <div class="article-header">
+        <h1 class="article-title">{{ post.title }}</h1>
+        <div class="article-meta">{{ post.created_at|date:'Y年m月d日 H:i' }}</div>
+    </div>
+    
     {% if post.image %}
-    <p>
-        <img src="{{ post.image.url }}" alt="{{ post.title }}" style="max-width: 100%; height: auto;">
-    </p>
+    <img src="{{ post.image.url }}" alt="{{ post.title }}" class="article-image">
     {% endif %}
-    <div>
+    
+    <div class="article-content">
         {{ post.content|linebreaksbr }}
     </div>
-    <div style="margin-top: 20px;">
+    
+    <div class="like-section">
         {% if is_liked %}
-        <p>❤️ <strong>{{ post.likes }}</strong> いいね（既にいいねしました）</p>
+        <span class="like-count">❤️ {{ post.likes }}</span>
+        <span class="like-status">既にいいねしました</span>
         {% else %}
         <form method="post" action="{% url 'blog:like' post.pk %}" style="display: inline;">
             {% csrf_token %}
-            <button type="submit" style="background: #ff6b6b; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
-                ❤️ いいね ({{ post.likes }})
+            <button type="submit" class="like-button">
+                ❤️ いいね
             </button>
         </form>
+        <span class="like-count">{{ post.likes }}</span>
         {% endif %}
     </div>
 </article>
-<p>
+
+<div class="action-links">
     <a href="{% url 'blog:edit' post.pk %}">この記事を編集する</a>
-</p>
-<a href="{% url 'blog:list' %}">← 一覧に戻る</a>
+    <a href="{% url 'blog:list' %}">← 一覧に戻る</a>
+</div>
 {% endblock %}
